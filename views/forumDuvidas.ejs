@@ -1,0 +1,19 @@
+<!-- views/forum-duvidas.ejs -->
+<h1>Fórum de Dúvidas</h1>
+
+<a href="/forum-duvidas/novo">Nova Dúvida</a>
+
+<% if (duvidas && duvidas.length > 0) { %>
+    <ul>
+        <% duvidas.forEach(duvida => { %>
+            <li>
+                <strong><%= duvida.titulo %></strong><br>
+                <i>Por <%= duvida.Aluno ? duvida.Aluno.nome : duvida.Professor.nome %> - <%= duvida.tipoParticipacao %></i><br>
+                <%= duvida.conteudo %><br>
+                <a href="/forum-duvidas/<%= duvida.id %>">Ver Detalhes</a>
+            </li>
+        <% }) %>
+    </ul>
+<% } else { %>
+    <p>Nenhuma dúvida encontrada.</p>
+<% } %>

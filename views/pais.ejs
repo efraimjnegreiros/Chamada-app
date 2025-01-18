@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerenciamento de Pais</title>
+    <style>
+        /* Estilos semelhantes aos do cadastro de disciplinas */
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        h1, h2 {
+            text-align: center;
+        }
+
+        table, th, td {
+            border: 2px solid #000000;
+            border-radius: 10px;
+            border-collapse: collapse;
+        }
+        td, th {
+            padding: 20px;
+            text-align: center;
+        }
+
+        form {
+            width: 300px;
+            margin: 20px auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            background-color: #f9f9f9;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        form label, form input, form select {
+            display: block;
+            width: 100%;
+            margin-bottom: 10px;
+        }
+
+        form input[type="text"], form select {
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            width: 100%;
+            height: 40px;
+            box-sizing: border-box;
+        }
+
+        form button {
+            width: 100%;
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        form button:hover {
+            background-color: #45a049;
+        }
+
+        #search-bar {
+            width: 300px;
+            padding: 10px;
+            margin-bottom: 20px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            text-align: center;
+        }
+
+        /* Modal styles */
+        #editModal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+
+        .modal-content {
+            background-color: #fff;
+            margin: 10% auto;
+            padding: 20px;
+            border-radius: 5px;
+            width: 80%;
+            max-width: 400px;
+        }
+
+        .close {
+            color: #aaa;
+            font-size: 28px;
+            font-weight: bold;
+            position: absolute;
+            top: 10px;
+            right: 25px;
+            cursor: pointer;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+    </style>
+</head>
+<body>
+    <h1>Gerenciamento de Pais</h1>
+
+    <form action="/pais/criar" method="POST">
+        <label for="nome">Nome:</label>
+        <input type="text" id="nome" name="nome" required>
+    
+        <label for="email">Email:</label>
+        <input type="text" id="email" name="email" required>
+    
+        <label for="senha">Senha:</label>
+        <input type="password" id="senha" name="senha" required>
+    
+        <label for="alunoId">Escolha um Aluno:</label>
+        <select name="alunoId" id="alunoId" required>
+            <option value="">Selecione um aluno</option>
+            <% alunos.forEach(aluno => { %>
+                <option value="<%= aluno.id %>"><%= aluno.nome %></option>
+            <% }) %>
+        </select>
+    
+        <button type="submit">Criar Pai</button>
+    </form>
+    
+    <h2>Lista de Pais</h2>
+    <table>
+        <tr>
+            <th>Nome</th>
+            <th>Email</th>
+            <th>Aluno</th>
+            <th>Editar</th>
+            <th>Deletar</th>
+        </tr>
+        <% pais.forEach(pai => { %>
+            <tr>
+                <td><%= pai.nome %></td>
+                <td><%= pai.email %></td>
+                <td><%= pai.Aluno ? pai.Aluno.nome : 'Sem aluno associado' %></td>
+                <td><button onclick="openEditModal('<%= pai.id %>', '<%= pai.nome %>', '<%= pai.email %>', '<%= pai.alunoId %>')">Editar</button></td>
+                <td><a href="/pais/deletar/<%= pai.id %>">Deletar</a></td>
+            </tr>
+    
+            <!-- Modal de edição para cada pai -->
+            <div id="editModal<%= pai.id %>" style="display:none;">
+                <div class="modal-content">
+                    <span class="close" onclick="closeEditModal(<%= pai.id %>)">&times;</span>
+                    <h2>Editar Pai</h2>
+                    <form action="/pais/editar/<%= pai.id %>" method="POST">
+                        <input type="hidden" id="editId" name="id" value="<%= pai.id %>">
+                        <label for="editNome">Nome:</label>
+                        <input type="text" id="editNome" name="nome" value="<%= pai.nome %>" required>
+    
+                        <label for="editEmail">Email:</label>
+                        <input type="email" id="editEmail" name="email" value="<%= pai.email %>" required>
+    
+                        <label for="editAlunoId">Escolha um Aluno:</label>
+                        <select name="alunoId" id="editAlunoId" required>
+                            <option value="">Selecione um aluno</option>
+                            <% alunos.forEach(aluno => { %>
+                                <option value="<%= aluno.id %>" <%= aluno.id === pai.alunoId ? 'selected' : '' %>><%= aluno.nome %></option>
+                            <% }) %>
+                        </select>
+    
+                        <button type="submit">Atualizar Pai</button>
+                    </form>
+                </div>
+            </div>
+        <% }) %>
+    </table>
+    
+    <script>
+        function openEditModal(id, nome, email, alunoId) {
+            document.getElementById('editModal' + id).style.display = "block";
+        }
+    
+        function closeEditModal(id) {
+            document.getElementById('editModal' + id).style.display = "none";
+        }
+    
+        // Fechar o modal ao clicar fora da janela
+        window.onclick = function(event) {
+            if (event.target.classList.contains('modal-content')) {
+                closeEditModal();
+            }
+        }
+    </script>
+    

@@ -1,0 +1,118 @@
+<!-- views/forum-duvidas.ejs -->
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fórum de Dúvidas</title>
+    <style>
+        /* Estilo Geral */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+
+        h1 {
+            text-align: center;
+            color: #4CAF50;
+            margin-top: 20px;
+        }
+
+        a {
+            text-decoration: none;
+            color: #007BFF;
+        }
+
+        a:hover {
+            color: #0056b3;
+        }
+
+        .container {
+            width: 80%;
+            margin: 0 auto;
+        }
+
+        .novo-duvida {
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        li {
+            background-color: #fff;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        li strong {
+            font-size: 1.2em;
+            color: #333;
+        }
+
+        li i {
+            font-style: italic;
+            color: #888;
+        }
+
+        .duvida-info {
+            margin: 10px 0;
+        }
+
+        .actions {
+            margin-top: 10px;
+        }
+
+        .actions a {
+            margin-right: 10px;
+            color: #007BFF;
+        }
+
+        .actions a:hover {
+            color: #0056b3;
+        }
+
+        .no-duvidas {
+            text-align: center;
+            font-size: 1.1em;
+            color: #888;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Fórum de Dúvidas</h1>
+        <div class="novo-duvida">
+            <a href="/forum-duvidas/novo">Nova Dúvida</a>
+        </div>
+
+        <% if (duvidas && duvidas.length > 0) { %>
+            <ul>
+                <% duvidas.forEach(duvida => { %>
+                    <li>
+                        <div class="duvida-info">
+                            <strong><%= duvida.titulo %></strong><br>
+                            <i>Por <%= duvida.Aluno ? duvida.Aluno.nome : duvida.Professor.nome %> - <%= duvida.tipoParticipacao %></i><br>
+                            <%= duvida.conteudo %><br>
+                        </div>
+                        <div class="actions">
+                            <a href="/forum-duvidas/<%= duvida.id %>">Ver Detalhes</a> |
+                            <a href="/forum-duvidas/<%= duvida.id %>/editar">Editar</a>
+                        </div>
+                    </li>
+                <% }) %>
+            </ul>
+        <% } else { %>
+            <p class="no-duvidas">Nenhuma dúvida encontrada.</p>
+        <% } %>
+    </div>
+</body>
+</html>

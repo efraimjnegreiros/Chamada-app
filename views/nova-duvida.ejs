@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Criar Nova Dúvida</title>
+    <style>
+        /* Estilo geral */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+
+        h1 {
+            text-align: center;
+            color: #4CAF50;
+            margin-top: 20px;
+        }
+
+        .container {
+            width: 80%;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        label {
+            font-weight: bold;
+        }
+
+        input, textarea, select {
+            padding: 10px;
+            font-size: 1rem;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            width: 100%;
+        }
+
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            font-size: 1rem;
+            cursor: pointer;
+            border-radius: 5px;
+            align-self: center;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        .field-container {
+            display: none;
+        }
+
+        .field-container label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .back-link {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        a {
+            color: #007BFF;
+            text-decoration: none;
+        }
+
+        a:hover {
+            color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Criar Nova Dúvida</h1>
+
+        <!-- Formulário para criar uma nova dúvida -->
+        <form action="/forum-duvidas/criar" method="POST">
+            <div>
+                <label for="titulo">Título da Dúvida:</label>
+                <input type="text" id="titulo" name="titulo" required>
+            </div>
+
+            <div>
+                <label for="conteudo">Conteúdo da Dúvida:</label>
+                <textarea id="conteudo" name="conteudo" rows="5" required></textarea>
+            </div>
+
+            <div>
+                <label for="tipoParticipacao">Tipo de Participação:</label>
+                <select id="tipoParticipacao" name="tipoParticipacao" required>
+                    <option value="Aluno">Aluno</option>
+                    <option value="Professor">Professor</option>
+                </select>
+            </div>
+
+            <!-- Campos para escolher Aluno ou Professor dependendo do tipo de participação -->
+            <div id="alunoField" class="field-container">
+                <label for="alunoId">Selecione o Aluno:</label>
+                <select id="alunoId" name="alunoId">
+                    <% if (alunos && alunos.length > 0) { %>
+                        <% alunos.forEach(aluno => { %>
+                            <option value="<%= aluno.id %>"><%= aluno.nome %></option>
+                        <% }) %>
+                    <% } %>
+                </select>
+            </div>
+
+            <div id="professorField" class="field-container">
+                <label for="professorId">Selecione o Professor:</label>
+                <select id="professorId" name="professorId">
+                    <% if (professores && professores.length > 0) { %>
+                        <% professores.forEach(professor => { %>
+                            <option value="<%= professor.id %>"><%= professor.nome %></option>
+                        <% }) %>
+                    <% } %>
+                </select>
+            </div>
+
+            <button type="submit">Criar Dúvida</button>
+        </form>
+
+        <div class="back-link">
+            <a href="/forum-duvidas">Voltar para o Fórum</a>
+        </div>
+    </div>
+
+    <script>
+        // Exibe o campo correto (Aluno ou Professor) dependendo da seleção
+        document.getElementById('tipoParticipacao').addEventListener('change', function() {
+            const tipoParticipacao = this.value;
+            if (tipoParticipacao === 'Aluno') {
+                document.getElementById('alunoField').style.display = 'block';
+                document.getElementById('professorField').style.display = 'none';
+            } else {
+                document.getElementById('alunoField').style.display = 'none';
+                document.getElementById('professorField').style.display = 'block';
+            }
+        });
+
+        // Inicia com a exibição do campo correto baseado na seleção atual
+        document.getElementById('tipoParticipacao').dispatchEvent(new Event('change'));
+    </script>
+
+</body>
+</html>

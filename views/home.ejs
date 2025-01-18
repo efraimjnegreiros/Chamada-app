@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Área do Funcionário</title>
+    <style>
+        /* Resetando o estilo padrão do navegador */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Corpo da página */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f6f9;
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+        }
+
+        h2, h3 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+        }
+
+        p, ul {
+            margin-bottom: 15px;
+        }
+
+        /* Estilizando a lista de navegação */
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        ul li {
+            margin: 10px 0;
+        }
+
+        ul li a {
+            text-decoration: none;
+            color: #3498db;
+            font-size: 16px;
+            transition: color 0.3s ease;
+        }
+
+        ul li a:hover {
+            color: #2980b9;
+        }
+
+        /* Estilizando os botões */
+        button {
+            background-color: #3498db;
+            color: white;
+            padding: 10px 20px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin-bottom: 10px;
+        }
+
+        button:hover {
+            background-color: #2980b9;
+        }
+
+        button:focus {
+            outline: none;
+        }
+
+        /* Estilizando o formulário */
+        form {
+            margin-bottom: 20px;
+        }
+
+        label {
+            font-size: 16px;
+            margin-right: 10px;
+        }
+
+        select {
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        /* Estilo para o link de logout */
+        a {
+            text-decoration: none;
+            color: #e74c3c;
+            font-size: 16px;
+            margin-top: 20px;
+            display: inline-block;
+        }
+
+        a:hover {
+            color: #c0392b;
+        }
+
+        /* Container para o conteúdo */
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Títulos principais */
+        .section-title {
+            font-size: 24px;
+            margin-bottom: 20px;
+            text-align: center;
+            color: #2c3e50;
+        }
+
+        /* Espaçamento entre as seções */
+        .section {
+            margin-bottom: 40px;
+        }
+
+        /* Botões separados por linha */
+        .button-group {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>Bem-vindo à área do Funcionário</h2>
+
+        <!-- Seção de navegação -->
+        <div class="section">
+            <h3 class="section-title">Escolha para qual área você deseja ir:</h3>
+            <ul>
+                <li><a href="/funcionarios">Listar Funcionários</a></li>
+                <li><a href="/alunos">Listar Alunos</a></li>
+                <li><a href="/professores">Listar Professores</a></li>
+                <li><a href="/disciplinas">Listar Disciplinas</a></li>
+                <li><a href="/aulas">Listar Aulas</a></li>
+                <li><a href="/presencas">Listar Presenças</a></li>
+                <li><a href="/matriculas">Realizar Matrículas</a></li>
+                <li><a href="/eventos">Listar Eventos</a></li>
+                <li><a href="/forum-duvidas">Fórum de Dúvidas</a></li>
+            </ul>
+        </div>
+
+        <!-- Seção de geração de relatórios -->
+        <div class="section">
+            <h3 class="section-title">Gerar Relatórios</h3>
+
+            <div class="button-group">
+                <button onclick="window.location.href='/gerar-pdf-todas-aulas'">PDF de Presenças e Ausências</button>
+                <button onclick="window.location.href='/gerar-pdf-aulas-professores'">PDF de Aulas e Professores</button>
+                <form id="pdfEventoForm" action="/gerar-pdf-eventos" method="GET">
+                    <button type="submit">Gerar PDF de Todos os Eventos</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Seção de gerar relatório de alunos matriculados em uma disciplina -->
+        <div class="section">
+            <h3 class="section-title">Gerar Relatório dos Alunos Matriculados em uma Disciplina</h3>
+            <form id="pdfForm">
+                <label for="disciplinaId">Escolha uma Disciplina:</label>
+                <select name="disciplinaId" id="disciplinaId" required>
+                    <option value="">Selecione uma disciplina</option>
+                    <% disciplinas.forEach(disciplina => { %>
+                        <option value="<%= disciplina.id %>"><%= disciplina.nome %></option>
+                    <% }) %>
+                </select>
+                <button type="submit">Gerar PDF</button>
+            </form>
+        </div>
+
+        <!-- Script para capturar o evento de envio do formulário de geração de PDF de disciplina -->
+        <script>
+            document.getElementById('pdfForm').addEventListener('submit', function (e) {
+                e.preventDefault();
+                const disciplinaId = document.getElementById('disciplinaId').value;
+                if (disciplinaId) {
+                    window.location.href = `/gerar-pdf-alunos-disciplinas/${disciplinaId}`;
+                }
+            });
+        </script>
+
+        <!-- Link de logout -->
+        <a href="/logout">Sair</a>
+    </div>
+
+</body>
+</html>

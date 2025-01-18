@@ -1,0 +1,140 @@
+<!-- views/ver-duvida.ejs -->
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= duvida.titulo %></title>
+    <style>
+        /* Estilo geral */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+
+        h1 {
+            text-align: center;
+            color: #4CAF50;
+            margin-top: 20px;
+        }
+
+        .container {
+            width: 80%;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        p {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            color: #555;
+        }
+
+        .author-info {
+            margin: 10px 0;
+            font-style: italic;
+            color: #777;
+        }
+
+        .resposta-section {
+            margin-top: 30px;
+        }
+
+        .resposta-section h3 {
+            color: #4CAF50;
+        }
+
+        .resposta-section p {
+            background-color: #f0f8ff;
+            padding: 10px;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+
+        form {
+            margin-top: 20px;
+            border-top: 1px solid #ddd;
+            padding-top: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+
+        textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 1rem;
+            height: 120px;
+            resize: vertical;
+        }
+
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            font-size: 1rem;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        a {
+            color: #007BFF;
+            text-decoration: none;
+        }
+
+        a:hover {
+            color: #0056b3;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1><%= duvida.titulo %></h1>
+        <p><%= duvida.conteudo %></p>
+        <div class="author-info">
+            <i>Por <%= duvida.Aluno ? duvida.Aluno.nome : duvida.Professor.nome %> - <%= duvida.tipoParticipacao %></i>
+        </div>
+
+        <% if (duvida.resposta) { %>
+            <div class="resposta-section">
+                <h3>Resposta:</h3>
+                <p><%= duvida.resposta %></p>
+            </div>
+        <% } else { %>
+            <form action="/forum-duvidas/<%= duvida.id %>/responder" method="POST">
+                <label for="resposta">Sua Resposta:</label>
+                <textarea name="resposta" id="resposta" required></textarea>
+                <button type="submit">Responder</button>
+            </form>
+        <% } %>
+
+        <div class="back-link">
+            <a href="/forum-duvidas">Voltar para o Fórum</a>
+        </div>
+    </div>
+</body>
+</html>
