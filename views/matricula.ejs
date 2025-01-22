@@ -105,8 +105,12 @@
         </tr>
         <% matriculas.forEach(matricula => { %>
             <tr>
-                <td><%= matricula.Aluno.nome %></td>
-                <td><%= matricula.Disciplina.nome %></td>
+                <!-- Verifica se Aluno existe antes de acessar o nome -->
+                <td><%= matricula.Aluno && matricula.Aluno.nome ? matricula.Aluno.nome : 'Aluno não encontrado' %></td>
+
+                <!-- Verifica se Disciplina existe antes de acessar o nome -->
+                <td><%= matricula.Disciplina && matricula.Disciplina.nome ? matricula.Disciplina.nome : 'Disciplina não encontrada' %></td>
+
                 <td><a href="/matriculas/deletar/<%= matricula.id %>">Deletar</a></td>
             </tr>
         <% }) %>
