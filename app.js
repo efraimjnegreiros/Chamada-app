@@ -327,7 +327,6 @@ app.get('/home', isAuthenticated, async (req, res) => {
     }
 });
 
-// const bcrypt = require('bcryptjs'); // Para criptografar a senha
 const transporter = nodemailer.createTransport({
     service: 'gmail', // Usando o Gmail, você pode mudar se necessário
     auth: {
