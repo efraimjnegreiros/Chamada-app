@@ -5,20 +5,26 @@ const router = express.Router();
 // Rota para listar todas as matrículas
 router.get('/matriculas', async (req, res) => {
     try {
+        // Buscar as matrículas e incluir os dados de Aluno e Disciplina
         const matriculas = await Matricula.findAll({
             include: [
-                { model: Aluno, attributes: ['nome'] }, // Inclui o nome do aluno
-                { model: Disciplina, attributes: ['nome'] } // Inclui o nome da disciplina
+                { model: Aluno, attributes: ['nome'] }, // Nome do aluno
+                { model: Disciplina, attributes: ['nome'] } // Nome da disciplina
             ]
         });
-        const alunos = await Aluno.findAll(); // Carregar todos os alunos
-        const disciplinas = await Disciplina.findAll(); // Carregar todas as disciplinas
+
+        // Carregar todos os alunos e disciplinas
+        const alunos = await Aluno.findAll();
+        const disciplinas = await Disciplina.findAll();
+
+        // Renderizar a página passando os dados
         res.render('matricula', { matriculas, alunos, disciplinas });
     } catch (err) {
         console.log("Erro ao obter matrículas:", err);
         res.status(500).send('Erro ao carregar matrículas');
     }
 });
+
 
 // Rota para criar uma nova matrícula
 router.post('/matriculas/criar', async (req, res) => {

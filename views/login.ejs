@@ -60,6 +60,9 @@ button:hover {
     color: #ff0000;
     margin-bottom: 15px;
 }
+#formEsqueceuSenha, #sucesso {
+    display: none;
+}
     </style>
 </head>
 <body>
@@ -75,5 +78,37 @@ button:hover {
         </div>
         <button type="submit">Entrar</button>
     </form>
+    <p id="esqueceuSenha">Esqueceu a Senha?</p>
+    <form action="/recuperarSenha" method="post" id="formEsqueceuSenha">
+        <div>
+            <label for="email">Digite o seu email: </label>
+            <input type="email" name="email" id="email">
+        </div>
+        <button type="submit" id="envio">Recuperar Senha</button>
+    </form>
+    <p id="sucesso">Uma Nova Senha foi Enviada para o seu Email caso ele esteja cadastrado!</p>
+
+    <script>
+        var bt1 = document.getElementById("esqueceuSenha");
+        const form = document.getElementById("formEsqueceuSenha");
+        const sucesso = document.getElementById("sucesso");
+
+        bt1.addEventListener('click', ()=>{
+            if (form.style.display === 'none') {
+                form.style.display = 'block'; // Exibe o formulário
+            } else {
+                form.style.display = 'none';  // Esconde o formulário
+            }
+            bt1 = "a";
+        });
+        document.getElementById("envio").addEventListener('click', ()=> {
+            if (sucesso.style.display === 'none') {
+                form.style.display = 'block'; 
+                sucesso.style.display = 'block';
+            } else {
+                sucesso.style.display = 'none';  // Esconde o formulário
+            }
+        })
+    </script>
 </body>
 </html>

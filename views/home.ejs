@@ -148,9 +148,11 @@
                 <li><a href="/professores">Listar Professores</a></li>
                 <li><a href="/disciplinas">Listar Disciplinas</a></li>
                 <li><a href="/aulas">Listar Aulas</a></li>
+                <li><a href="/pais">Listar Pais</a></li>
                 <li><a href="/presencas">Listar Presenças</a></li>
                 <li><a href="/matriculas">Realizar Matrículas</a></li>
                 <li><a href="/eventos">Listar Eventos</a></li>
+                <li><a href="/reuniao">Listar Reuniões</a></li>
                 <li><a href="/forum-duvidas">Fórum de Dúvidas</a></li>
             </ul>
         </div>
@@ -164,6 +166,9 @@
                 <button onclick="window.location.href='/gerar-pdf-aulas-professores'">PDF de Aulas e Professores</button>
                 <form id="pdfEventoForm" action="/gerar-pdf-eventos" method="GET">
                     <button type="submit">Gerar PDF de Todos os Eventos</button>
+                </form>
+                <form action="/gerar-pdf-reunioes" id="pdfReuniaoForm" method="get">
+                    <button type="submit">Gerar PDF de Todas as Reuniões</button>
                 </form>
             </div>
         </div>
