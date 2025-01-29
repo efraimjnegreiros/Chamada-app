@@ -198,19 +198,22 @@ app.get('/gerar-pdf-todas-aulas', isAuthenticated, async (req, res) => {
 app.get('/gerar-pdf-alunos-disciplinas/:disciplinaId', isAuthenticated, async (req, res) => {
     const { disciplinaId } = req.params;
     try {
+        // Procurando pela disciplina com o ID fornecido
         const disciplina = await Disciplina.findByPk(disciplinaId, {
             include: [
                 {
-                    model: Matricula,
-                    include: [{ model: Aluno, attributes: ['nome'] }]
+                    model: Matricula, // Incluindo as matrículas associadas
+                    include: [{ model: Aluno, attributes: ['nome'] }] // Incluindo o nome dos alunos
                 }
             ]
         });
 
+        // Verificando se a disciplina foi encontrada
         if (!disciplina) {
             return res.status(404).send('Disciplina não encontrada');
         }
 
+        // Criando o documento PDF
         const doc = new PDFDocument();
         res.setHeader('Content-Type', 'application/pdf');
         res.setHeader('Content-Disposition', `inline; filename="relatorio_alunos_${disciplina.nome}.pdf"`);
@@ -219,9 +222,18 @@ app.get('/gerar-pdf-alunos-disciplinas/:disciplinaId', isAuthenticated, async (r
         doc.fontSize(18).text(`Relatório de Alunos Matriculados - Disciplina: ${disciplina.nome}`, { align: 'center' });
         doc.moveDown(2);
 
-        const alunos = disciplina.Matriculas.map(matricula => matricula.Aluno.nome);
-        doc.fontSize(12).text('Alunos Matriculados:', { underline: true });
-        doc.fontSize(12).text(alunos.join(', ') || 'Nenhum aluno matriculado');
+        // Verificando se há matrículas associadas e mapeando os alunos
+        if (disciplina.Matriculas && disciplina.Matriculas.length > 0) {
+            const alunos = disciplina.Matriculas
+                .filter(matricula => matricula.Aluno && matricula.Aluno.nome) // Filtrando matrículas com alunos válidos
+                .map(matricula => matricula.Aluno.nome); // Acessando o nome do aluno
+
+            // Caso existam alunos, exibe o nome de cada um no PDF
+            doc.fontSize(12).text('Alunos Matriculados:', { underline: true });
+            doc.fontSize(12).text(alunos.join(', ') || 'Nenhum aluno matriculado');
+        } else {
+            doc.fontSize(12).text('Nenhum aluno matriculado');
+        }
 
         doc.end();
     } catch (err) {
@@ -229,6 +241,7 @@ app.get('/gerar-pdf-alunos-disciplinas/:disciplinaId', isAuthenticated, async (r
         res.status(500).send('Erro ao gerar o PDF');
     }
 });
+
 // Rota para gerar o PDF com os eventos
 app.get('/gerar-pdf-eventos', isAuthenticated, async (req, res) => {
     try {
