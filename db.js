@@ -137,7 +137,14 @@ const Evento = sequelize.define('Evento', {
     }
 });
 
-
+// Modelo de Reunião
+const Reuniao = sequelize.define('Reuniao', {
+    id : { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
+    titulo : { type: DataTypes.STRING, allowNull: false },
+    pautas : { type: DataTypes.TEXT, allowNull: false },
+    data: { type: DataTypes.DATE, allowNull: false},
+    local: { type: DataTypes.STRING, allowNull: false}
+});
 
 // Sincronizando o banco de dados e forçando a recriação das tabelas
 sequelize.sync({ force: false })  // Use force: true para recriar as tabelas
@@ -149,4 +156,4 @@ sequelize.sync({ force: false })  // Use force: true para recriar as tabelas
     });
 
 // Exportando os modelos
-module.exports = { sequelize, Aluno, Professor, Disciplina, Aula, Presenca, Funcionario, Matricula, Duvida, Pai, Evento };
+module.exports = { sequelize, Aluno, Professor, Disciplina, Aula, Presenca, Funcionario, Matricula, Duvida, Pai, Evento, Reuniao };
